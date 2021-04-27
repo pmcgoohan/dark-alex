@@ -9,7 +9,7 @@ An encrypted version of the [Alex Protocol](https://github.com/pmcgoohan/targeti
 - [printer](https://github.com/pmcgoohan/targeting-zero-mev/blob/main/content-layer.md#printer) (miner/validator/sequencer) creates a chunk of encrpyted txs (encryption mitigates transaction censorship/re-ordering)
 - printer adds chunk to the encrypted chunk queue at ≈network latency (≈1.2 secs - preserving time order [where meaningful](https://github.com/pmcgoohan/alex-latency-width))
 - when users/vaults see a new encrypted chunk they release keys to decrypt the chunk
-- printer adds chunk to the (decrypted) chunk queue (allowing auditability and visible guarantees of tx order before a block is printed)
+- printer adds chunk to the (decrypted) chunk queue (allowing auditability and visible guarantees of tx order before a block is printed) (TODO [skipping](https://github.com/pmcgoohan/targeting-zero-mev/blob/main/content-layer.md#skippers) needed here)
 - printer writes [contiguous chunks](https://github.com/pmcgoohan/targeting-zero-mev/blob/main/content-layer.md#printer-withholding) to the block from the chunk queue
 
 ### DDOS / Gas Price Visibility
@@ -17,19 +17,20 @@ There are two problems with users encrpyting txs (in any user encrypted mempool 
 1) Printers cannot see the gas price in an encrypted tx
 2) Users can DDOS the network with invalid txs
 
-To solve this, we trust users to give us accurate information/validity guarantees about the content of an encrypted tx, and then penalize them if it turns out to be inaccurate once decrypted.
-A user takes out a small, recoverable bond for each address. The bond only needs to be enough to cover a few invalid txs in order to mitigate DDOS.
+To solve this, we trust users to give us accurate information/validity guarantees about the content of an encrypted tx and then penalize them if it turns out to be inaccurate once decrypted.
+A user takes out a small, recoverable bond for each address. The bond needs to be enough to cover an invalid tx and the costs of a fraud proof in order to mitigate DDOS.
 
 ##### Filtering
 Vaults/Mempool can quickly filter out:
-- any txs with zero bond balances
-- any originator addresses with less than MinGas in eth
+- txs with zero bond balances
+- txs with an invalid or old lastBlockHash
+- txs where the originator address has < minGas in eth
 
 ##### User Fraud proofs
 - user key does not decrypt tx
 - decrypted tx is invalid
 - decrypted tx gasCost does not match encryptedTxMessage gasCost
-- MinGas is not available to execute and lastBlockHash is only unlock time blocks old
+- minGas is not available to execute and lastBlockHash is only a few blocks old (unlock time)
 
 #### ```EncryptedTxContract``` (L1 smart contract)
 
@@ -38,25 +39,23 @@ Vaults/Mempool can quickly filter out:
 
 ```.gasPrice``` must match the encryptedTx gasPrice once decrypted
 
-```.maxBlockHeight``` set to current blockheight + unlock time
-
-```.lastBlockHash``` 
+```.lastBlockHash``` so users don't get penalized for old txs
 
 ##### User functions
-```.LockBond()``` send bond to sc (enough for a few failed txs)
+```.LockBond()``` send bond to sc (enough for a failed tx and a fraud proof)
 
 ```.UnlockBond()``` release remaining, cannot withdraw for n blocks
 
-```.WithdrawBond()``` withdraw unlocked remaining bond once the minimum time has elapsed
+```.WithdrawBond()``` withdraw unlocked remaining bond once the minimum unlock time has elapsed
 
 ##### Vault functions
-```.PenalizeBadKey(encryptedTxMessage,keys0,1,...)``` if invalid, apply penalty to  user bond
+```.PenalizeBadKey(encryptedTxMessage,keys0,1,...)``` if invalid, apply penalty to user bond
 
-```.InvalidTx(decryptedTx)``` if invalid, apply penalty to  user bond
+```.InvalidTx(decryptedTx)``` if invalid, apply penalty to user bond
 
-```.InvalidGasCost(encryptedTxMessage,decryptedTx)``` if invalid, apply penalty to  user bond
+```.InvalidGasCost(encryptedTxMessage,decryptedTx)``` if invalid, apply penalty to user bond
 
-```.InvalidBalance(not sure yet)``` is this neeeded if we are filtering out originator addresses with <MinGas above?
+```.InvalidBalance(not sure yet)``` is this neeeded if we are filtering out originator addresses with < MinGas above?
 
 Vault/Printer fraud proofs will be similar to [Alex](https://github.com/pmcgoohan/targeting-zero-mev/blob/main/content-layer.md#validation-rules-and-proofs) 
 
@@ -72,6 +71,7 @@ For now let's call this the TVM (transaction verification virtual machine).
 ### Vaults
 
 Vault set formation TBC.
+
 A user might split their key between for eg: 2 groups of 3 vaults.
 
 Users will choose vaults/vault groups based on how quick they are to respond and how secure in terms of not releasing data early. All this is publicly visible.
