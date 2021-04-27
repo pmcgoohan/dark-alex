@@ -35,19 +35,27 @@ Vaults/Mempool can quickly filter out:
 
 ##### encryptedTxMessage (signed by originator)
 ```.encryptedTx```
+
 ```.gasPrice``` must match the encryptedTx gasPrice once decrypted
+
 ```.maxBlockHeight``` set to current blockheight + unlock time
+
 ```.lastBlockHash``` 
 
 ##### User functions
 ```.LockBond()``` send bond to sc (enough for a few failed txs)
+
 ```.UnlockBond()``` release remaining, cannot withdraw for n blocks
+
 ```.WithdrawBond()``` withdraw unlocked remaining bond once the minimum time has elapsed
 
 ##### Vault functions
 ```.PenalizeBadKey(encryptedTxMessage,keys0,1,...)``` if invalid, apply penalty to  user bond
+
 ```.InvalidTx(decryptedTx)``` if invalid, apply penalty to  user bond
+
 ```.InvalidGasCost(encryptedTxMessage,decryptedTx)``` if invalid, apply penalty to  user bond
+
 ```.InvalidBalance(not sure yet)``` is this neeeded if we are filtering out originator addresses with <MinGas above?
 
 Vault/Printer fraud proofs will be similar to [Alex](https://github.com/pmcgoohan/targeting-zero-mev/blob/main/content-layer.md#validation-rules-and-proofs) 
