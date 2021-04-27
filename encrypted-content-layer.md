@@ -22,7 +22,7 @@ A user takes out a small, recoverable bond for each address. The bond needs to b
 
 ##### Filtering
 Vaults/Mempool can quickly filter out:
-- encryptedTxMsg with zero bond balances
+- encryptedTxMsg with zero bond balance
 - encryptedTxMsg with an invalid or old lastBlockHash
 - encryptedTxMsg where the originator address has < minGas in eth
 
