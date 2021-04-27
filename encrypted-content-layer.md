@@ -62,6 +62,9 @@ Vault/Printer fraud proofs will be similar to [Alex](https://github.com/pmcgooha
 
 ##### TVM
 For fraud proofs to work, the ```.InvalidTx``` and ```.InvalidGasCost``` functions must be calculable in the EVM.
+
 This may require something like the OVM in Optimism (so a lot of this work has been done already). It only needs to allow for verification of a user tx which may simplify the problem.
+
 [EIP #726](https://github.com/ethereum/EIPs/issues/726) would be a great solution.
+
 For now let's call this the TVM (transaction verification virtual machine).
