@@ -1,6 +1,6 @@
 ## Dark Alex
 
-An encrypted version of the [Alex Protocol](https://github.com/pmcgoohan/targeting-zero-mev/blob/main/content-layer.md)
+An encrypted mempool version of the [Alex Protocol](https://github.com/pmcgoohan/targeting-zero-mev/blob/main/content-layer.md)
 (under construction - unresolved issues - hard hats must be worn)
 
 ### Overview
