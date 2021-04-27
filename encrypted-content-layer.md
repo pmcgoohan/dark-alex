@@ -68,3 +68,16 @@ This may require something like the OVM in Optimism (so a lot of this work has b
 [EIP #726](https://github.com/ethereum/EIPs/issues/726) would be a great solution.
 
 For now let's call this the TVM (transaction verification virtual machine).
+
+### Vaults
+
+Vault set formation TBC.
+A user might split their key between for eg: 2 groups of 3 vaults.
+
+Users will choose vaults/vault groups based on how quick they are to respond and how secure in terms of not releasing data early. All this is publicly visible.
+
+This means that these vital client/vault heuristics can be modified over time without any fork risk.
+
+Vaults that misbehave by not releasing key confirmations/keys promptly and when required, or that release keys early will be dropped by users and will not recieve rewards.
+
+Vaults could either be scheduled together in sets, or they could negotiate with each other to form groups, or some combination of both.
