@@ -81,3 +81,11 @@ This means that these vital client/vault heuristics can be modified over time wi
 Vaults that misbehave by not releasing key confirmations/keys promptly and when required, or that release keys early will be dropped by users and will not recieve rewards.
 
 Vaults could either be scheduled together in sets, or they could negotiate with each other to form groups, or some combination of both.
+
+### Gas Price Auction
+
+Interesting points to consider- not thoroughly thought out...
+Now that we have mitigated DDOS attacks by other means (largely the reason for the GPA) and now that printers have no choice but to print content chunks, can we use a fixed gas price not a user defined one?
+If so, this would:
+1) reduce gas prices enourmously
+2) preserve time ordering (GPA incentivizes printers to prioritize gas price over timestamp. In the absence of any other data about an encrpyted tx, they may as well use timestamp)
