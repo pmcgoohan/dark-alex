@@ -22,19 +22,19 @@ A user takes out a small, recoverable bond for each address. The bond needs to b
 
 ##### Filtering
 Vaults/Mempool can quickly filter out:
-- txs with zero bond balances
-- txs with an invalid or old lastBlockHash
-- txs where the originator address has < minGas in eth
+- encryptedTxMsg with zero bond balances
+- encryptedTxMsg with an invalid or old lastBlockHash
+- encryptedTxMsg where the originator address has < minGas in eth
 
 ##### User Fraud proofs
 - user key does not decrypt tx
 - decrypted tx is invalid
-- decrypted tx gasCost does not match encryptedTxMessage gasCost
+- decrypted tx gasCost does not match encryptedTxMsg gasCost
 - minGas is not available to execute and lastBlockHash is only a few blocks old (unlock time)
 
 #### ```EncryptedTxContract``` (L1 smart contract)
 
-##### encryptedTxMessage (signed by originator)
+##### encryptedTxMsg (signed by originator)
 ```.encryptedTx```
 
 ```.gasPrice``` must match the encryptedTx gasPrice once decrypted
@@ -49,11 +49,11 @@ Vaults/Mempool can quickly filter out:
 ```.WithdrawBond()``` withdraw unlocked remaining bond once the minimum unlock time has elapsed
 
 ##### Vault functions
-```.PenalizeBadKey(encryptedTxMessage,keys0,1,...)``` if invalid, apply penalty to user bond
+```.PenalizeBadKey(encryptedTxMsg,keys0,1,...)``` if invalid, apply penalty to user bond
 
 ```.InvalidTx(decryptedTx)``` if invalid, apply penalty to user bond
 
-```.InvalidGasCost(encryptedTxMessage,decryptedTx)``` if invalid, apply penalty to user bond
+```.InvalidGasCost(encryptedTxMsg,decryptedTx)``` if invalid, apply penalty to user bond
 
 ```.InvalidBalance(not sure yet)``` is this neeeded if we are filtering out originator addresses with < MinGas above?
 
