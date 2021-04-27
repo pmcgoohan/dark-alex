@@ -21,10 +21,10 @@ To solve this, we trust users to give us accurate information/validity guarantee
 A user takes out a small, recoverable bond for each address. The bond needs to be enough to cover an invalid tx and the costs of a fraud proof in order to mitigate DDOS.
 
 ##### Filtering
-Vaults/Mempool can quickly filter out an:
-- encryptedTxMsg with a zero bond balance
-- encryptedTxMsg with an invalid or old lastBlockHash
-- encryptedTxMsg where the originator address has < minGas in eth
+Vaults/Mempool can quickly filter out any encryptedTxMsg where the originator:
+- has a zero bond balance
+- included an invalid or old lastBlockHash
+- address has < minGas in eth
 
 ##### User Fraud proofs
 - user key does not decrypt tx
